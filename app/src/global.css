@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spline+Sans:wght@300..700&family=Trispace:wght@100..800&family=Unbounded:wght@200..900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/**
+
+Stablishing Google Fonts by duo.
+This duos works geniunelly well.
+
+*/
+
+:root {
+  --sp-sans: 'Spline-sans', sans-serif;
+  --inter: 'Inter', sans-serif;
+
+  --trispace: 'Trispace', sans-serif;
+  --alegreya: 'Alegreya', serif;
+
+  --montserrat: 'Montserrat', sans-serif;
+  --poppins: 'Poppins', sans-serif;
+
+  --unbounded: 'Unbounded', sans-serif;
+  --geist: 'Geist', sans-serif;
+
+
+  /* colorsss */
+
+  --accent-txt: #000;
+  --primary-txt: #171717;
+  --secondary-txt: #292929;
+  --desc-txt: #707070;
+
+  --primary-border: #adadad;
+  --secondary-border: #3d3d3d;
+
+
+  --btn: #000;
+  --btn-txt: #fff;
+  --btn-cancel: #CE1212;
+  --btn-accept: #78C841;
+  --btn-confirm: #00b7ff;
+}
+
+html { 
+  scroll-behavior: smooth;
+}
