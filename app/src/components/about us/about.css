@@ -32,3 +32,25 @@
 .container .img-about {
     height: 300px;
 }
+
+.exp-button {
+    margin-top: 40px;
+    height: 50px;
+    width: 250px;
+    font-family: var(--poppins);
+    text-decoration: none;
+    line-height: 50px;
+    text-align: center;
+
+    background: var(--btn);
+    border-radius: 10px;
+    color: var(--btn-txt);
+    border: 1px solid var(--secondary-border);
+    transition: .3s;
+}
+
+.exp-button:hover {
+    transition: .3s;
+    background: var(--btn-confirm);
+    color: var(--txt--accent);
+}
