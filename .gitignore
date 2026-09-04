@@ -9,6 +9,10 @@ lerna-debug.log*
 *.env
 *.env.local
 *env.example
+package.json
+package-lock.json
+yarn.lock
+
 
 node_modules
 dist
