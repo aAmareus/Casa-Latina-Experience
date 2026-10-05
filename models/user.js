@@ -32,6 +32,10 @@ const userSchema = new Schema({
         required: true,
         default: 'user'
     },
+    active: {
+        type: Boolean,
+        default: true
+    },
     created: {
         type: Date,
         required: true,

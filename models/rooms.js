@@ -35,11 +35,23 @@ const roomSchema = new Schema({
         required: true,
         min: 0,
     },
+    images: {
+        type: [String],
+        default: []
+    },
+    amenities: {
+        type: [String],
+        default: []
+    },
     descuento: {
         type: Number,
         default: 0,
         min: 0,
         max: 100
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 })
 

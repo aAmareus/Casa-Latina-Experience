@@ -7,7 +7,7 @@ export const validateReserva = (reserva) => {
 
 
     // Room 
-    if (!data.room_id) {
+    if (!reserva.room_id) {
         errors.room_id = 'Room ID is requerido.';
     } else if (!mongoose.Types.ObjectId.isValid(reserva.room_id)) {
         errors.room_id = 'El ID es inválido.'
@@ -15,14 +15,14 @@ export const validateReserva = (reserva) => {
 
 
     // Check-in
-    if (!data.check_in) {
+    if (!reserva.check_in) {
         errors.check_in = 'La fecha de check-in es requerida.';
     } else if (!validator.isISO8601(reserva.check_in)) {
         errors.check_in = 'La fecha de check-in no es válida.';
     }
 
     // Check-out
-    if (!data.check_out) {
+    if (!reserva.check_out) {
         errors.check_out = 'La fecha de check-out es requerida.';
     } else if (!validator.isISO8601(reserva.check_out)) {
         errors.check_out = 'La fecha de check-out no es válida.';

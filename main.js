@@ -1,6 +1,48 @@
-express = require("express");
-cors = require("cors");
-dotenv =require('dotenv').config();
+import express from "express"
+import cors from "cors"
+import path from "path"
+import { fileURLToPath } from "url"
 
-// Delete ts when deploying to production
-console.log("PORT:", process.env.PORT);
+import userRoutes from "./routes/user.routes.js"
+import roomRoutes from "./routes/rooms.routes.js"
+import reservasRoutes from "./routes/reserva.routes.js"
+import paymentsRoutes from "./routes/payments.routes.js"
+import poiRoutes from "./routes/poi.routes.js"
+
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname =path.dirname(__filename)
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+// app.use(express.json()) // enable when prod
+
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://casalatina-experience.com"
+    ],
+    methods: [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+    ],
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization"
+    ]
+}))
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
+// Routes
+app.use("/api/users", userRoutes)
+app.use("/api/rooms", roomRoutes)
+app.use("/api/reservas", reservasRoutes)
+app.use("/api/payments", paymentsRoutes)
+app.use("/api/pois", poiRoutes)
+
+export default app;
