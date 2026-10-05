@@ -1,0 +1,25 @@
+.price {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    border-radius: 8px;
+    border: var(--primary-border) solid 2px;
+    background: var(--ligth-bg);
+}
+.price p {
+    font-size: 12px;
+}
+
+.price p:nth-child(3) {
+    font-weight: 500;
+}
+
+.select-btn {
+    border: var(--btn) 1px solid;
+    color: var(--btn-txt);
+    background: var(--btn);
+
+}

@@ -1,0 +1,80 @@
+.hero-title, .hero-text {
+    font-family: var(--montserrat);
+    color: var(--light-txt);
+}
+
+.hero-img {
+    filter: blur(5px) grayscale(25%);
+}
+
+.hero-title::selection,
+.main-txt::selection {
+    background: green;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 200px;
+    padding: 5px 15px;
+    background: var(--glassmorphism);
+    box-shadow: 0 0 5px 2px var(--glass-shadow);
+    border-radius: 10px;
+    color: var(--light-txt);
+}
+
+.item-info span {
+    font-family: var(--poppins);
+    font-weight: 560;
+    color: var(--light-txt);
+}
+
+/* keyframes for details */
+@keyframes daysOpen {
+    from {
+        --numOpen: 0;
+    } 
+    to {
+        --numOpen: 365;
+    }
+}
+
+@keyframes numExp {
+    from {
+        --numExp: 0;
+    } 
+    to {
+        --numExp: 10;
+    }
+}
+
+.statDays {
+    counter-reset: countDaysOpen var(--numOpen);
+}
+
+.customExp {
+    counter-reset: experiences var(--numExp);
+}
+
+.statDays::after {
+    content: counter(countDaysOpen);
+}
+
+.customExp::after {
+    content: "+" counter(experiences);
+}
+
+.stats.is-visible .statDays {
+    animation: daysOpen 3s ease-in-out forwards;
+    animation-delay: 4100ms;
+}
+
+.stats.is-visible .customExp {
+    animation: numExp 1.5s ease-in-out forwards;
+    animation-delay: 4100ms;
+}
+
+.footer-container {
+    background: var(--darkblue-bg);
+}

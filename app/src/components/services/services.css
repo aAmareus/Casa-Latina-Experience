@@ -1,0 +1,83 @@
+.selectBtn {
+    background: var(--btn);
+    color: var(--btn-txt);
+    border-radius: 8px;
+    border: 1px solid #fff;
+}
+
+.service {
+    font-family: var(--inter);
+}
+
+.selectBtn:hover {
+    background: var(--btn-confirm);
+    color: var(--btn);
+    border: 1px solid var(--btn);
+}
+
+.service-card-list {
+    color: var(--desc-txt);
+}
+
+.bundle-title {
+    color: var(--main-txt);
+    font-family: var(--inter);
+}
+
+.gallery_img:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+}
+
+/* .bundle {
+    border: 1px solid red;
+} */
+
+.bundlecard-title {
+    width: 100%;
+    padding: 20px 0;
+    color: var(--btn-txt);
+}
+
+.bundlecard-title::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform .5s ease-out;
+    z-index: 0;
+}
+
+.bundlecard-title h3 {
+    z-index: 1;
+}
+
+.bundle-silver .bundlecard-title::before {
+    background: url('../../assets/img/bundles/silver_pattern.png');
+}
+
+.bundle-gold .bundlecard-title::before {
+    background: url('../../assets/img/bundles/gold_pattern.png');
+}
+
+.bundle-diamond .bundlecard-title::before {
+    background: url('../../assets/img/bundles/diamond_pattern.png');
+}
+
+.bundlebutton {
+    background: var(--btn);
+    border: 1px solid var(--btn);
+    color: var(--btn-txt);
+    transition: all .3s;
+}
+
+.bundlebutton:hover {
+    background: var(--btn-confirm);
+}
+
+.bundle:hover .bundlecard-title::before {
+    transform: scale(1.105);
+
+}

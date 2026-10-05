@@ -1,0 +1,35 @@
+.title {
+    font-size: 28px;
+}
+
+.silhouette {
+    width: 40%;
+}
+
+.stat {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 5px var(--primary-shadow);
+    text-align: center;
+}
+
+/*  WHY THIS F**** THING DOESNT WORKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+HELP ME PLEASSSSSSSSSSSSSSEE*/
+@keyframes count1 {
+    from {
+        --num1: 0;
+    }
+    to {
+        --num1: 4162;
+    }
+}
+
+.stat_01.is-visible {
+    animation: count1 3s ease-out forwards;
+    counter-set: my-counter var(--num1);
+}
+
+.stat_01 .num::after {
+    content: counter(my-counter);
+}

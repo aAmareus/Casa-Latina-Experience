@@ -1,0 +1,183 @@
+.form-container {
+  border-radius: 8px;
+  box-shadow: 0 0 8px 0 var(--third-shadow);
+}
+
+
+.input {
+  margin-top: 15px;
+  width: 100%;
+  outline: none;
+  border-radius: 8px;
+  height: 45px;
+  border: 1px solid var(--btn);
+  background: transparent;
+  padding-left: 10px;
+}
+
+.input-field .label {
+  position: absolute;
+  top: 25px;
+  left: 15px;
+  color: var(--desc-txt);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.input-field .input:focus ~ .label,
+.input-field .input:valid ~ .label {
+  top: 5px;
+  left: 5px;
+  font-size: 12px;
+  color: var(--hover-txt);
+  background: #fff;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.input-field .input:focus,
+.input-field .input:valid {
+    border: 1px solid var(--focus-lbl);
+}
+
+
+.submit-btn {
+  background: var(--btn);
+  color: var(--btn-txt);
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--btn);
+}
+
+.submit-btn:hover {
+  background: var(--btn-confirm-bg);
+}
+
+.icon {
+  background:
+    url("../../assets/img/background-form.jpg");
+  background-position: center center;
+  background-size: cover;
+  border-radius: 0 8px 8px 0;
+}
+
+
+.sidebar {
+    width: 300px;
+    /* background: red; */
+    padding: 20px 10px;
+    font-family: var(--geist);
+    border-right: 1px solid var(--primary-border);
+}
+
+.sidebartitle-container {
+    padding: 30px 0;
+    height: auto;
+    /* background: green; */
+}
+
+.list-item {
+    padding: 20px 0;
+    transition: all .3s ease;
+    color: var(--primary-txt);
+}
+
+.list-item:hover {
+    padding: 20px 20px;
+    transition: all .3s ease;
+    color: var(--hover-txt);
+    cursor: pointer;
+}
+
+.sidebar-bottom {
+  margin-top: 500px;
+  transition: all .3s ease;
+}
+
+.sidebar-bottom:hover {
+  color: var(--cancel-txt);
+  transition: all .3s ease;
+}
+
+.menuhandler {
+    width: calc(80% - 300px);
+    height: 700px;
+    /* background: red; */
+    border: 1px solid var(--primary-border);
+}
+
+.searchinput {
+  width: 250px;
+  padding: 5px 15px;
+  outline: none;
+  border: var(--main-lbl) 1px solid;
+  border-radius: 10px;
+  transition: all .3s ease;
+  font-size: 14px;
+}
+
+.searchinput:hover,
+.searchinput:focus {
+  border: var(--hover-lbl) 1px solid;
+  transition: all .3s ease;
+}
+
+
+.search-item {
+  padding: 5px 15px;
+  border-bottom: 2px solid var(--main-lbl);
+  color: var(--main-txt);
+  transition: all .3s ease;
+  background: white;
+}
+
+.search-item:hover {
+  cursor: pointer;
+  color: var(--focus-lbl);
+  border-bottom: 2px solid var(--focus-lbl);
+  background: var(--blue-bg-lbl);
+  transition: all .3s ease;
+}
+
+.db-content {
+  height: calc(100% - 100px);
+  background-color: red;
+  overflow: auto;
+  /* background: red; */
+}
+
+.usercard {
+  /* background: green; */
+  border-radius: 8px;
+  border: 1px solid var(--primary-border);
+}
+
+.user-pfp {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: blue;
+}
+
+.counter {
+  color: var(--desc-txt);
+}
+
+.user-button {
+  background: var(--btn);
+  color: var(--btn-txt);
+  text-align: center;
+  width: 70px;
+  height: 100%;
+  font-size: 14px;
+  border: 1px solid var(--btn);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.user-button:hover {
+  background: var(--btn-accept-bg);
+  color: var(--btn);
+  transition: all .3s ease;
+}

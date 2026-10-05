@@ -1,14 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spline+Sans:wght@300..700&family=Trispace:wght@100..800&family=Unbounded:wght@200..900&display=swap');
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+@layer base {
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: var(--montserrat);
+    color: var(--primary-txt);
+  }
 }
 
 /**
 
-Stablishing Google Fonts by duo.
+Stablishing Google Fonts by duos.
 This duos works geniunelly well.
 
 */
@@ -33,18 +39,96 @@ This duos works geniunelly well.
   --primary-txt: #171717;
   --secondary-txt: #292929;
   --desc-txt: #707070;
+  --light-txt: #e0e0e0;
+  --hover-txt: #007bff;
+  --cancel-txt: #e90611;
 
+  /* backgroundsss */
+  --darkgreen-bg: #031800; /* It's a green waaaay too dark */
+  --darkgray-bg: #121212;
+  --darkblue-bg: #01010f;
+  --ligth-bg: #f0eded;
+
+
+  /* background effecttss */
+  --glassmorphism: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(5px);
+  --glass-shadow: rgba(163, 163, 163, 0.4);
+
+  /* borders */
   --primary-border: #adadad;
   --secondary-border: #3d3d3d;
 
-
+  /*  buttons */
   --btn: #000;
   --btn-txt: #fff;
-  --btn-cancel: #CE1212;
-  --btn-accept: #78C841;
-  --btn-confirm: #009ddb;
+  --btn-cancel-bg: #CE1212;
+  --btn-accept-bg: #78C841;
+  --btn-confirm-bg: #009ddb;
+
+  /* labels & inputs */
+  --main-lbl: #000;
+  --hover-lbl: #007bff;
+  --focus-lbl: #0256af;
+  --blue-bg-lbl: #2371c449;
+
+
+  /* shadows */
+  --primary-shadow: #dfdfdf;
+  --secondary-shadow: #0000000d;
+  --third-shadow: rgba(0, 0, 0, 0.6);
+
+  /* screens */
+  --max-dv-w: 1920px; /* 1920px from x=0 -> x=1920 */
+  --max-dv-h: 1080px; /* 1080px from y=0 -> y=1080 */
 }
 
-html { 
+html {
   scroll-behavior: smooth;
+}
+
+/* counters for some shit i'm trying lol */
+@property --num1 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --num2 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --num3 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --num4 {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+/*
+  items below are part of the hero Section
+*/
+
+@property --numOpen {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --numExp {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.hr {
+  opacity: 0.1;
+  width: 100%;
 }
