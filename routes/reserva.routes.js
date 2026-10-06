@@ -1,12 +1,17 @@
 import { Router } from "express"
 
-import { createReserva, getReservas, getReservaById, cancelReserva } from "../controllers/reserva.controller.js";
+import { createReserva, getReservas, getReservaById, cancelReserva, quoteReserva } from "../controllers/reserva.controller.js";
 
 import { validate } from "../middlewares/validate.middleware.js"
 import { validateReserva } from "../validators/reserva.validator.js"
 import { authMiddleware } from "../middlewares/auth.middleware.js"
 
 const router = Router();
+
+router.post(
+    "/quote",
+    quoteReserva
+)
 
 router.get(
     "/",

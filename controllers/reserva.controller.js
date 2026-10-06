@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import Reserva from "../models/reserva.js"
 import Room from "../models/rooms.js"
+import { calculateReservationPrice } from "../services/pricing.service.js"
 
 export const createReserva = async (req, res) => {
     try {
@@ -219,6 +220,106 @@ export const cancelReserva = async (req, res) => {
         })
     }catch(e){
         console.error("Error cancelling reservation: ", e)
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+}
+
+export const quoteReserva = async (req, res) => {
+    try {
+        const {
+            room_id,
+            check_in,
+            check_out
+        } = req.body
+
+        if(!room_id || !check_in || !check_out){
+            return res.status(400).json({
+                success: false,
+                message: "room_id, check_in, check_out are required"
+            })
+        }
+
+        if(!mongoose.isValidObjectId(room_id)){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid room ID"
+            })
+        }
+
+        const checkIn = new Date(check_in)
+        const checkOut = new Date(check_out)
+    
+        if(
+            Number.isNaN(checkIn.getTime()) ||
+            Number.isNaN(checkOut.getTime())
+        ) {
+            return res.status(400).json({
+                success: false,
+                return: "Invalid dates"                
+            })
+        }
+
+        if(checkIn >= checkOut){
+            return res.status(400).json({
+                success: false,
+                message: "Check-out must be after check-in"
+            })
+        }
+
+        const room = await Room.findById(room_id)
+
+        if(!room){
+            return res.status(404).json({
+                success: false,
+                message: "Room not found"
+            })
+        }
+
+        if(!room.active){
+            return res.status(400).json({
+                success: false,
+                message: "Room is not available"
+            })
+        }
+
+        const overlappingReserva = await Reserva.findOne({
+            room_id,
+            estado: {
+                $in: ["pendiente", "confirmada"]
+            },
+            check_in: {
+                $lt: checkOut
+            },
+            check_out: {
+                $gt: checkIn
+            }
+        })
+
+        if(overlappingReserva){
+            return res.status(409).json({
+                success: false,
+                message: "Room is not available for selected dates"
+            })
+        }
+
+        const quote = calculateReservationPrice(
+            room,
+            check_in,
+            check_out
+        )
+
+        return res.status(200).json({
+            success: true,
+            available: true,
+            quote
+        })
+    
+    } catch(e){
+        console.error("Error quoting reservarion:", e)
 
         return res.status(500).json({
             success: false,
