@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import HeroBanner from '../../assets/img/banner_voidless.png'
-import Banner2 from '../../assets/img/banner2.jpeg'
+import Banner2 from '../../assets/img/pool_bg_1.jpeg'
+import Logo from "../../assets/img/logo-removebg-preview.png"
 
 import './navigation.css'
 
@@ -43,8 +44,8 @@ const MainHero = () => {
                 <div className="mx-auto max-w-2xl lg:mx-0">
                     <h2 className="text-5xl font-semibold tracking-tight sm:text-7xl hero-title">Descubre Casa Latina Brasil Experience</h2>
                     <p className="main-txt mt-8 text-lg font-medium text-pretty sm:text-xl/8 hero-text">
-                        Sua experiência privada na Região dos Lagos começa aqui. <br />
-                        Hospedagem exclusiva com atendimento personalizado, traslados, experiências na praia e momentos criados sob medida para quem quer descansar de verdade.
+                        Su experiencia privada en la Región de los Lagos comienza aquí. <br />
+                        Alojamiento exclusivo con atención personalizada, traslados, experiencias y servicios en la playa y momentos creados a su medida para quien desee descansar de verdad.
                     </p>
                 </div>
                 <dl ref={statsRef} className="stats mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
@@ -64,6 +65,15 @@ const MainHero = () => {
                     </div>
                 </dl>
             </div>
+
+
+
+            <img 
+            src={Logo}
+            className="absolute top-8 right-90 w-60"
+            alt="Casa Latina Logo"
+            loading='eager'
+            />
         </div>
     )
 }

@@ -1,0 +1,5 @@
+.booking-modal-overlay {
+    background: #292929;
+    backdrop-filter: var(--glass-blur);
+    /* font-size: 14px; */
+}

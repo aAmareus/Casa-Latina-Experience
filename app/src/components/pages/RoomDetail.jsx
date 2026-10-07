@@ -6,6 +6,7 @@ import { faPerson } from "@fortawesome/free-solid-svg-icons";
 import RoomGallery from "../rooms/roomGallery.jsx";
 import Amenities from "../services/amenities.jsx"
 import Poi from "../services/poi.map.jsx"
+import Bookingmodal from "../reservations/bookingmodal.jsx";
 import "./roomdetail.css";
 
 import { getRoomById } from "../../../api/rooms.api";
@@ -18,6 +19,8 @@ const RoomDetail = () => {
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const loadRoom = async () => {
@@ -50,7 +53,7 @@ const RoomDetail = () => {
 
   return (
     <>
-      <div className="room-detail w-full flex flex-wrap p-15 px-50 ">
+      <div className="room-detail w-full flex flex-wrap py-15 px-50 relative">
         <div className="room-detail-header w-full">
           <h1 className="text-4xl font-bold">{room.name}</h1>
         </div>
@@ -104,12 +107,24 @@ const RoomDetail = () => {
             </div>
           </div>
 
-          <button className="w-[50%] mx-auto py-2 select-btn btn rounded-2 cursor-pointer rounded-xl">Quiero reservar!</button>
+          <button 
+            className="w-[50%] mx-auto py-2 select-btn btn rounded-2 cursor-pointer rounded-xl"
+            room={room}
+            onClick={() => setShowModal(true)}
+            >Quiero reservar!</button>
         </div>
       </div>
 
       <hr  className="w-[80%] mx-auto"/>
       <Poi />
+
+
+      {showModal && (
+        <Bookingmodal
+          room={room}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </>
   );
 };

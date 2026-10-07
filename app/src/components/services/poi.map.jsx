@@ -1,13 +1,41 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import { maxGeneratorDuration } from "motion/react";
+
+const categoryConfig = {
+    beach: {
+        label: "playa",
+        color: "#00b7ff"
+    },
+    restaurant: {
+        label: "Restaurante",
+        color: "#412d22"
+    },
+    supermarket: {
+        label: "Supermercados",
+        color: "#a76ece"
+    },
+    pharmacy: {
+        label: "Farmacias y hospitales",
+        color: "#ce4b5b"
+    },
+    tourism: {
+        label: "Turismo",
+        color: "#0b7625"
+    },
+    other: {
+        label: "Otros",
+        color: "#292929"
+    }
+}
 
 const Poimap = () => {
 
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
+
+    const [activeCategories, setActiveCategories] = useState([])
 
     useEffect(() => {
         const loadMap = async() => {
@@ -29,6 +57,7 @@ const Poimap = () => {
                     zoom: 14
                 })
 
+                // Casa Latina's Marker
                 new mapboxgl.Marker({
                     color: '#ff0000'
                 })
@@ -45,6 +74,7 @@ const Poimap = () => {
                 )
                 .addTo(mapRef.current)
 
+                // get POIS
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pois`)
 
                 if(!response.ok){
@@ -62,6 +92,8 @@ const Poimap = () => {
                     propertyLocation.latitude
                 ])
 
+                const categories = new Set()
+
                 points.forEach((point) => {
 
                     const coordinates = [
@@ -71,8 +103,14 @@ const Poimap = () => {
 
                     console.log(`Agregando ${point.name}: `, coordinates)
 
+                    const config =
+                        categoryConfig[point.category] ?? categoryConfig.other
+
+                    categories.add(
+                        categoryConfig[point.category] ? point.cateogory : "other"
+                    )
                     new mapboxgl.Marker({
-                        color: "#00b7ff"
+                        color: config.color
                     })
                     .setLngLat(coordinates)
                     .setPopup(
@@ -80,21 +118,23 @@ const Poimap = () => {
                             offset: 25
                         }).setHTML(`
                             <strong>${point.name}</strong>
-                            <p>${point.description && ""}</p>
+                            <p>${point.description ?? ""}</p>
                             `)
                     )
                     .addTo(mapRef.current)
 
                     bounds.extend(coordinates)
-
-                    if(points.length > 0){
-                        mapRef.current.fitBounds(bounds, {
-                            padding: 80,
-                            maxZoom: 15,
-                            duration: 1000
-                        })
-                    }
                 })
+
+                setActiveCategories([...categories])
+
+                if(points.length > 0){
+                    mapRef.current.fitBounds(bounds,{
+                        padding: 80,
+                        maxZoom: 15,
+                        duration: 1000
+                    })
+                }
 
             } catch(e){
                 console.error("Error loading map: ", e)
@@ -102,6 +142,13 @@ const Poimap = () => {
         }
 
         loadMap()
+
+        return () => {
+            if(mapRef.current) {
+                mapRef.current.remove()
+                mapRef.current = null
+            }
+        }
     }, [])
 
     return (
@@ -111,6 +158,7 @@ const Poimap = () => {
                     ¿Que hay cerca de Casa Latina?
                 </h2>
                 <div ref={mapContainerRef} className="h-125 w-full overflow-hidden rounded-2xl">
+                    <div className="absolute bottom-6 left-6 z-10 min-w-[180px] rounded-xl">asd</div>
                 </div>
             </div>
         </div>

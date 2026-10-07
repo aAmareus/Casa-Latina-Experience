@@ -12,6 +12,10 @@
     background: green;
 }
 
+.main-txt {
+    font-weight: 500;
+}
+
 .item-info {
     display: flex;
     flex-direction: column;
@@ -22,6 +26,7 @@
     box-shadow: 0 0 5px 2px var(--glass-shadow);
     border-radius: 10px;
     color: var(--light-txt);
+
 }
 
 .item-info span {
