@@ -22,7 +22,8 @@ app.use(express.json())
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://casalatina-experience.com"
+        "https://casalatina-experience.com",
+        "https://zxpfcpbp-8080.brs.devtunnels.ms/"
     ],
     methods: [
         "GET",

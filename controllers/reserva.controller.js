@@ -52,19 +52,13 @@ export const createReserva = async (req, res) => {
             })
         }
 
-        // using low season price by default, after we calculate real price per season
-        const ppn = room.priceLowSeason
-        const mpd = 1000 * 60 * 60 * 24
-
-        const nights = Math.ceil(
-            (checkOut - checkIn) / mpd
+        const quote = calculateReservationPrice(
+            room,
+            check_in,
+            check_out
         )
 
-        let totalPrice = ppn * nights
-
-        if(room.descuento > 0){
-            totalPrice -= totalPrice * (room.descuento / 100)
-        }
+        const totalPrice = quote.total
 
         const reserva = await Reserva.create({
             room_id,
