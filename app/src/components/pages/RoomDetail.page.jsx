@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams, Await } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPerson } from "@fortawesome/free-solid-svg-icons";
 
-import RoomGallery from "../rooms/roomGallery.jsx";
-import Amenities from "../services/amenities.jsx"
-import Poi from "../services/poi.map.jsx"
+import RoomGallery from "../rooms/roomGallery.room.jsx";
+import Amenities from "../services/amenities.service.jsx"
+import Poi from "../services/poimap.service.jsx"
 import Bookingmodal from "../reservations/bookingmodal.jsx";
 import "./roomdetail.css";
 
-import { getRoomById } from "../../../api/rooms.api";
+import { getRoomById } from "../../../api/rooms.api.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,6 +21,53 @@ const RoomDetail = () => {
   const [error, setError] = useState(null);
 
   const [showModal, setShowModal] = useState(false)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [checkingSession, setCheckingSession] = useState(false)
+
+  const handleBooking = () => {
+    if(checkingSession) return
+
+    setCheckingSession(true)
+
+    try {
+      const response = fetch(
+        `${API_URL}/api/users/profile`,
+        {
+          method: "GET",
+          credentials: "include"
+        }
+      )
+
+      if(response.ok) {
+        setShowModal(true)
+        return
+      }
+
+      if(response.status === 401 || response.status === 403) {
+        navigate("/login",
+          {
+            state: {
+              from: location.pathname,
+              openBooking: true
+            }
+          }
+        )
+
+        return
+      }
+
+      throw new Error(`Error HTTP ${response.status}`)
+    } catch(error) {
+      console.error("Error verificando sesión: ", status)
+
+      setError("No pudimos verificar tu sesión. Inténtalo nuevamente. ")
+    } finally {
+      setCheckingSession(false)
+    }
+  }
 
   useEffect(() => {
     const loadRoom = async () => {
@@ -38,6 +85,46 @@ const RoomDetail = () => {
 
     loadRoom();
   }, [id]);
+
+  useEffect(() => {
+    if(
+      location.state?.openBooking !== true ||
+      location.state?.from !== location.pathname ||
+      !room
+    ) {
+      return
+    }
+
+    let cancelled = false
+
+    const resumeBooking = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/users/profile`,
+          {
+            credentials: "include"
+          }
+        )
+
+        if(!cancelled && response.ok) {
+          setShowModal(true)
+
+          navigate(location.pathname, {
+            replace: true,
+            state: null
+          })
+        }
+      } catch(error) {
+        console.error("Error recuperando reserva: ", error)
+      }
+    }
+
+    resumeBooking()
+
+    return () => {
+      cancelled = true
+    }
+  }, [room, location, navigate])
 
   if (loading) {
     return <p>Cargando habitación...</p>;
@@ -109,8 +196,9 @@ const RoomDetail = () => {
 
           <button 
             className="w-[50%] mx-auto py-2 select-btn btn rounded-2 cursor-pointer rounded-xl"
+            disabled={checkingSession}
             room={room}
-            onClick={() => setShowModal(true)}
+            onClick={handleBooking}
             >Quiero reservar!</button>
         </div>
       </div>

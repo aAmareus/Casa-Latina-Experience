@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import HeroBanner from '../../assets/img/banner_voidless.png'
 import Banner2 from '../../assets/img/pool_bg_1.jpeg'
-import Logo from "../../assets/img/logo-removebg-preview.png"
+import Logo from "../../assets/icons/logo-removebg-preview.png"
 
 import './navigation.css'
 
@@ -50,17 +49,17 @@ const MainHero = () => {
                 </div>
                 <dl ref={statsRef} className="stats mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="item-info flex flex-col justify-around text-xl">
-                        Días al año 
+                        Días para disfrutar
                         <span className="statDays text-3xl"></span>
                     </div>
 
                     <div className="item-info text-xl">
-                        Experiencias personalizadas
+                        Experiencias & servicios
                         <span className="customExp text-3xl"></span>
                     </div>
 
                     <div className="item-info text-xl">
-                        Momentos inolvidables
+                        Momentos para recordar
                         <span className="moments text-4xl">∞</span>
                     </div>
                 </dl>

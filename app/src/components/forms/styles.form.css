@@ -1,0 +1,79 @@
+.contact {
+    background: var(--darkgray-bg)
+}
+
+.contact h2 {
+    color: var(--light-txt);
+}
+
+.form-input,
+.text-area {
+    border: var(--light-lbl) 1px solid;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 0 12px;
+    color: var(--light-txt);
+    letter-spacing: 1px;
+}
+
+.form-input ~ .lbl {
+    transition: all .3s ease;
+    pointer-events: none;
+    color: var(--desc-txt);
+}
+
+.form-input:focus ~ .lbl,
+.form-input:valid ~ .lbl {
+    background: var(--darkgray-bg);
+    top: -12px;
+    font-size: 14px;
+    padding: 2px 7px;
+    transition: all .3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.form-btn {
+    background: var(--btn-light);
+    border: var(--btn) 1px solid;
+    color: var(--btn-light-txt);
+    transition: all .2s ease;
+}
+
+.form-btn:hover {
+    background: var(--btn);
+    color: var(--btn-txt);
+    border: var(--btn-light) 1px solid;
+}
+
+.login-redirect {
+    color: var(--desc-txt);
+    font-size: 14px;
+}
+
+.login-link {
+    color: var(--link-txt);
+}
+
+.login-link:hover {
+    color: var(--link-hover-txt);
+}
+
+
+.sign-in-form {
+    background: var(--white-bg);
+}
+
+.panel-title {
+    color: var(--light-txt);
+}
+
+.form-btn {
+    background: var(--btn);
+    color: var(--btn-txt);
+}
+
+.panel-btn {
+    border: 2px solid var(--btn-light);
+    color: var(--btn-txt);
+}

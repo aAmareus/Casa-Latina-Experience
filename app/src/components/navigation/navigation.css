@@ -4,7 +4,7 @@
 }
 
 .hero-img {
-    filter: blur(5px) grayscale(25%);
+    filter: blur(5px) grayscale(10%);
 }
 
 .hero-title::selection,
@@ -14,6 +14,7 @@
 
 .main-txt {
     font-weight: 500;
+    text-shadow: 0 0 20px #000, 0 0 40px #000, 0 0 60px #000;
 }
 
 .item-info {
@@ -26,7 +27,6 @@
     box-shadow: 0 0 5px 2px var(--glass-shadow);
     border-radius: 10px;
     color: var(--light-txt);
-
 }
 
 .item-info span {
@@ -80,6 +80,102 @@
     animation-delay: 4100ms;
 }
 
-.footer-container {
-    background: var(--darkblue-bg);
+
+.section {
+    font-size: 16px;
+}
+
+.semi-title {
+    font-size: 20px;
+}
+
+svg.footer-icon {
+    font-size: 30px;
+    transition: transform 0.2s ease;
+}
+
+
+/* .wsp {
+    background: var(--wsp-color);
+} */
+
+.ig {
+    background: var(--ig-bg);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: trasparent;
+}
+
+.wsp:hover,
+.ig:hover {
+    transform: scale(1.1);
+}
+
+.wsp:hover svg.svg-inline--fa path {
+    fill: var(--wsp-color);
+}
+
+.ig:hover svg.svg-inline--fa path {
+    fill: var(--ig-color);
+}
+
+.navbar {
+    color: var(--primary-txt);
+    background: var(--white-bg);
+    border-bottom: 1px solid var(--primary-shadow);
+    z-index: 20;
+}
+
+.btn {
+    color: var(--primary-txt);
+}
+
+.second-btn {
+    border: 1px solid var(--btn);
+    z-index: 5;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    pointer-events: none;
+    transition: all .3s ease;
+    z-index: -5;
+}
+
+.second-btn::after {
+    background: var(--btn);
+}
+
+.second-btn:hover {
+    color: var(--btn-txt);
+}
+
+.second-btn:hover::after {
+    width: 100%;
+}
+
+.main-btn {
+    background: var(--btn);
+    color: var(--btn-txt);
+    z-index: 1 !important;
+}
+
+.main-btn::after {
+    background: var(--btn-accept-bg);
+    border-radius: 4px;
+}
+
+.main-btn:hover {
+    background: transparent;
+    color: var(--btn-light-txt);
+    border: 1px solid var(--btn);
+}
+
+.main-btn:hover::after {
+    width: 100%;
 }

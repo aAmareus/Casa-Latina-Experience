@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
+import "./services.css"
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const categoryConfig = {
@@ -107,7 +108,7 @@ const Poimap = () => {
                         categoryConfig[point.category] ?? categoryConfig.other
 
                     categories.add(
-                        categoryConfig[point.category] ? point.cateogory : "other"
+                        categoryConfig[point.category] ? point.category : "other"
                     )
                     new mapboxgl.Marker({
                         color: config.color
@@ -152,13 +153,57 @@ const Poimap = () => {
     }, [])
 
     return (
-        <div className="poi-container py-12">
+        <div className="poi-container py-12 mt-25">
             <div className="mx-auto max-w-7xl px-4">
                 <h2 className="mb-6 text-3xl font-semibold">
-                    ¿Que hay cerca de Casa Latina?
+                    Descubre que hacer durante tu estadía
                 </h2>
                 <div ref={mapContainerRef} className="h-125 w-full overflow-hidden rounded-2xl">
-                    <div className="absolute bottom-6 left-6 z-10 min-w-[180px] rounded-xl">asd</div>
+                    <div className="legend absolute bottom-6 right-6 z-10 p-2.5 min-w-45 rounded-xl">
+
+                        <h2 className="mb-3 font-semibold text-white">
+                            Leyenda
+                        </h2>
+
+                        <div className="flex flex-col gap-2">
+                            {/* Our marker */}
+                            <div className="flex items-center gap-2">
+                                <span
+                                    className="h-4 w-6"
+                                    style={{backgroundColor: "#ff0000"}}
+                                />
+
+                                <span className="text-sm text-white">
+                                    Casa Latina
+                                </span>
+                            </div>
+
+                            {/* Existing Categories Points */}
+                            {activeCategories.map((category) => {
+                                const config =
+                                    categoryConfig[category] ??
+                                    categoryConfig.other
+
+                                return (
+                                    <div
+                                        key={category}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <span 
+                                            className="h-4 w-6"
+                                            style={{
+                                                background:config.color
+                                            }}
+                                        />
+
+                                        <span className="text-sm text-white">
+                                            {config.label}
+                                        </span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -10,6 +10,16 @@
     font-family: var(--montserrat);
     color: var(--primary-txt);
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  
+  hr {
+    opacity: 0.1;
+    width: 100%;
+  }
 }
 
 /**
@@ -40,14 +50,18 @@ This duos works geniunelly well.
   --secondary-txt: #292929;
   --desc-txt: #707070;
   --light-txt: #e0e0e0;
+  --link-txt: #007bff;
+  --link-hover-txt: #005ec2;
   --hover-txt: #007bff;
   --cancel-txt: #e90611;
 
   /* backgroundsss */
   --darkgreen-bg: #031800; /* It's a green waaaay too dark */
-  --darkgray-bg: #121212;
+  --darkgray-bg: #252525;
   --darkblue-bg: #01010f;
-  --ligth-bg: #f0eded;
+  --light-gray-bg: #585858;
+  --light-bg: #f0eded;
+  --white-bg: #fff;
 
 
   /* background effecttss */
@@ -66,11 +80,17 @@ This duos works geniunelly well.
   --btn-accept-bg: #78C841;
   --btn-confirm-bg: #009ddb;
 
+  --btn-light: #fff;
+  --btn-light-hover: #b4b4b4;
+  --btn-light-txt: #292929;
+
   /* labels & inputs */
   --main-lbl: #000;
   --hover-lbl: #007bff;
   --focus-lbl: #0256af;
   --blue-bg-lbl: #2371c449;
+
+  --light-lbl: #c1c1c1;
 
 
   /* shadows */
@@ -81,37 +101,12 @@ This duos works geniunelly well.
   /* screens */
   --max-dv-w: 1920px; /* 1920px from x=0 -> x=1920 */
   --max-dv-h: 1080px; /* 1080px from y=0 -> y=1080 */
-}
 
-html {
-  scroll-behavior: smooth;
+  /* trademarks */
+  --icon-color: #fff;
+  --wsp-color: #25D366;
+  --ig-color: #E1306C;
 }
-
-/* counters for some shit i'm trying lol */
-@property --num1 {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-
-@property --num2 {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-
-@property --num3 {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-
-@property --num4 {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-
 /*
   items below are part of the hero Section
 */
@@ -126,9 +121,4 @@ html {
   syntax: "<integer>";
   initial-value: 0;
   inherits: false;
-}
-
-.hr {
-  opacity: 0.1;
-  width: 100%;
 }
