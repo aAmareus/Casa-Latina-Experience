@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams, Await } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPerson } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,9 +16,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 const RoomDetail = () => {
   const { id } = useParams();
 
-  const [room, setRoom] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [room, setRoom] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [bookingError, setBookingError] = useState(null)
 
   const [showModal, setShowModal] = useState(false)
 
@@ -27,16 +28,17 @@ const RoomDetail = () => {
 
   const [checkingSession, setCheckingSession] = useState(false)
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
+
     if(checkingSession) return
 
+    setBookingError(null);
     setCheckingSession(true)
 
     try {
-      const response = fetch(
+      const response = await fetch(
         `${API_URL}/api/users/profile`,
         {
-          method: "GET",
           credentials: "include"
         }
       )
@@ -61,9 +63,9 @@ const RoomDetail = () => {
 
       throw new Error(`Error HTTP ${response.status}`)
     } catch(error) {
-      console.error("Error verificando sesión: ", status)
+      console.error("Error verificando sesión: ", error)
 
-      setError("No pudimos verificar tu sesión. Inténtalo nuevamente. ")
+      setBookingError("No pudimos verificar tu sesión. Inténtalo nuevamente. ")
     } finally {
       setCheckingSession(false)
     }
@@ -195,11 +197,15 @@ const RoomDetail = () => {
           </div>
 
           <button 
-            className="w-[50%] mx-auto py-2 select-btn btn rounded-2 cursor-pointer rounded-xl"
+            className="w-[50%] mx-auto py-2 select-btn btn cursor-pointer rounded-xl"
             disabled={checkingSession}
-            room={room}
             onClick={handleBooking}
             >Quiero reservar!</button>
+            {bookingError && (
+              <p role="alert" className="text-sm text-red-600 text-center">
+                {bookingError}
+              </p>
+            )}
         </div>
       </div>
 

@@ -11,7 +11,7 @@ const Login = () => {
 
         <Navbar />
 
-        <div className='mx-auto my-25 w-[70%]'>
+        <div className='mx-auto my-25 w-[70%] max-[570px]:w-full max-[570px]:my-0'>
           <SignForm />
         </div>
     </div>
