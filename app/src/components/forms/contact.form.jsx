@@ -9,6 +9,7 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 
 const Contact = () => {
 
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",

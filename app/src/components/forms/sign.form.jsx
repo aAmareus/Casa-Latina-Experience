@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/auth.context.jsx";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +34,7 @@ const btnSolid =
   "max-[870px]:h-[35px] max-[870px]:w-[110px] max-[870px]:text-[0.7rem]"
 
 const btnTransparent =
-  `${btnBase} m-o h-[41px] w-[130px] border-2 bg-transparent text-[0.8rem] ` +
+  `${btnBase} m-0 h-[41px] w-[130px] border-2 bg-transparent text-[0.8rem] ` +
   "max-[870px]:h-[35px] max-[870px]:w-[110px] max-[870px]:text-[0.7rem]";
 
 const panelBase =
@@ -59,6 +61,10 @@ const SignForm = () => {
 
   const API_URL = import.meta.env.VITE_API_URL
 
+  const { login } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [isSignUp, setIsSignUp] = useState(false);
 
   // vars to handle forms
@@ -82,6 +88,7 @@ const SignForm = () => {
     try {
         const response = await fetch(`${API_URL}/api/users/login`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -97,24 +104,29 @@ const SignForm = () => {
             setError(
               data.errors
                 ? Object.values(data.errors).join(" ")
-                : data.message || "No se pudo registrar el usuario.",
+                : data.message || "No se pudo iniciar sesión.",
             )
 
             return
         }
 
-        alert("Inicio de sesión exitoso!");
+        alert("Inicio de sesión exitoso!"); // Esto se eliminaría
+        const from = location.state?.from ?? "/"
+        login(data.user)
         setEmail("");
         setPwd("");
 
-        setIsSignUp(false);
+        setIsSignUp(false); // Esto también se iría
+        navigate(from,{
+          replace: true,
+          state: location.state?.openBooking ? { from, openBooking: true } : null
+        })
     } catch(error) {
         console.error("Error al iniciar sesión:", error)
         setError("No se pudo conectar al servidor.")
     } finally {
         setSubmitting(false)
     }
-    //TO DO backend connection
   };
 
   const handleSignUp = async (e) => {
@@ -131,6 +143,7 @@ const SignForm = () => {
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({
                 name: name.trim(),
                 lastname: lastName.trim(),
@@ -225,11 +238,12 @@ const SignForm = () => {
               Bienvenido de vuelta!
             </h2>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faUser} className={inputIcon} />
               <input
                 type="email"
                 name="useremail"
+                autoComplete="email"
                 placeholder="Correo"
                 aria-label="Correo"
                 required
@@ -239,7 +253,7 @@ const SignForm = () => {
               />
             </div>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faLock} className={inputIcon} />
               <input
                 type="password"
@@ -254,6 +268,11 @@ const SignForm = () => {
               />
             </div>
 
+            {error && (
+              <p role="alert" className="text-sm text-red-600">
+                {error}
+              </p>
+            )}
             <button type="submit" className={`${btnSolid} form-btn`}>
               Ingresar
             </button>
@@ -267,7 +286,7 @@ const SignForm = () => {
           >
             <h2 className="mb-2.5 text-[2.2rem] font-semibold">Registrate</h2>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faUser} className={inputIcon} />
               <input
                 type="text"
@@ -282,7 +301,7 @@ const SignForm = () => {
               />
             </div>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faUser} className={inputIcon} />
               <input
                 type="text"
@@ -297,7 +316,7 @@ const SignForm = () => {
               />
             </div>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faPhone} className={inputIcon} />
               <input
                 type="tel"
@@ -312,7 +331,7 @@ const SignForm = () => {
               />
             </div>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faEnvelope} className={inputIcon} />
               <input
                 type="email"
@@ -327,7 +346,7 @@ const SignForm = () => {
               />
             </div>
 
-            <div className={inputField}>
+            <div className={`${inputField} login-input`}>
               <FontAwesomeIcon icon={faLock} className={inputIcon} />
               <input
                 type="password"
@@ -372,7 +391,7 @@ const SignForm = () => {
             <button
               type="button"
               className={`${btnTransparent} panel-btn`}
-              onClick={() => setIsSignUp(true)}
+              onClick={() => {setIsSignUp(true); setError(null)}}
             >
               regístrame
             </button>
@@ -403,7 +422,7 @@ const SignForm = () => {
             <button
               type="button"
               className={`${btnTransparent} panel-btn`}
-              onClick={() => setIsSignUp(false)}
+              onClick={() => {setIsSignUp(false); setError(null)}}
             >
               Iniciar sesión
             </button>

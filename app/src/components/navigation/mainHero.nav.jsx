@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import Banner2 from '../../assets/img/pool_bg_1.jpeg'
-import Logo from "../../assets/icons/logo-removebg-preview.png"
+import Logo from "../../assets/icons/Logotipo.webp"
 
 import './navigation.css'
 
@@ -43,8 +43,10 @@ const MainHero = () => {
                 <div className="mx-auto max-w-2xl lg:mx-0">
                     <h2 className="text-5xl font-semibold tracking-tight sm:text-7xl hero-title">Descubre Casa Latina Brasil Experience</h2>
                     <p className="main-txt mt-8 text-lg font-medium text-pretty sm:text-xl/8 hero-text">
-                        Su experiencia privada en la Región de los Lagos comienza aquí. <br />
-                        Alojamiento exclusivo con atención personalizada, traslados, experiencias y servicios en la playa y momentos creados a su medida para quien desee descansar de verdad.
+                        <span className="font-semibold text-white">Donde comienza tu experiencia en la Região dos Lagos</span> <br />
+                        Porque en casa Latina no solo vienes a dormir. Un espacio pensado para desconectar, disfrutar y vivir experiencias únicas y momentos creados especialmente para ti. <br />
+
+                        <strong className="text-white">Tu descanso. Tu ritmo. Tu experiencia.</strong>
                     </p>
                 </div>
                 <dl ref={statsRef} className="stats mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">

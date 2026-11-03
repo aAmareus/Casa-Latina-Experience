@@ -40,7 +40,7 @@ function App() {
               style={{ fontFamily: 'var(--montserrat)', fontSize: '32px', textAlign: 'center' }}
             >Estamos trabalhando nisso. <br /> Pedimos desculpas pelo inconveniente</p>
           </div>
-        }
+        } 
       >
         <Routes>
           <Route path='/' element={<Index />} />
@@ -49,7 +49,8 @@ function App() {
           <Route path="/catalogo/rooms/:id" element={<RoomDetail />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </PageTransition> */}
+      </PageTransition>
+      */}
 
     </>
   )

@@ -1,33 +1,79 @@
-import React from 'react'
-import { Link } from "react-router-dom"
-import "./navigation.css"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth.context.jsx";
+import "./navigation.css";
 
 const Navbar = () => {
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const [logginOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (logginOut) return;
+
+    setLoggingOut(true);
+
+    const closed = await logout();
+
+    setLoggingOut(false);
+
+    if (closed) {
+      navigate("/");
+    } else {
+      alert("Error al cerrar sesión. Intente nuevamente.");
+    }
+  };
 
   return (
-    <div className='w-full sticky top-0 navbar py-5 px-10 h-15 flex items-center justify-between'>
+    <div className="w-full sticky top-0 navbar py-5 px-10 h-15 flex items-center justify-between">
+      <div className="brand">
+        <Link to={"/"} className="font-semibold text-2xl">
+          Casa Latina Experience
+        </Link>
+      </div>
 
-        <div className="brand">
-            <Link to={"/"} className='font-semibold text-2xl'>Casa Latina Experince</Link>
-        </div>
+      <div className="toLogin flex gap-2">
+        {loading &&
+          (user ? (
+            <>
+              <span classname="mr-2">
+                Hola, <strong>{user.name}</strong>
+              </span>
 
-        <div className="toLogin flex gap-2">
-            <Link 
+              {user.rol === "admin" && (
+                <a href="#">Panel</a> // Add dashboard url once the admin panel is ready!
+              )}
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={logginOut}
+                className="main-btn btn py-1.5 px-4 rounded relative cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {logginOut ? "Saliendo..." : "Cerrar sesión"}
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
                 to={"/login"}
                 className="second-btn btn py-1.5 px-4 rounded relative"
-                >
+              >
                 Ingresar
-            </Link>
+              </Link>
 
-            <Link 
+              <Link
                 to={"/login"}
-                className='main-btn btn py-1.5 px-4 rounded relative'
-                >
+                className="main-btn btn py-1.5 px-4 rounded relative"
+              >
                 Registrarse
-            </Link>
-        </div>
+              </Link>
+            </>
+          ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

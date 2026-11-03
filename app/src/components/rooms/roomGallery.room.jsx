@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { imgUrl } from "../../utils/imgUrls.utils";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -44,9 +45,9 @@ const RoomGallery = ({ room }) => {
             {room.images.map((image, index) => (
               <SwiperSlide key={image} className="room-main-swiper-slide w-full">
                 <img
-                  src={`${API_URL}${image}`}
+                  src={imgUrl(image)}
                   alt={`${room.name} - Imagen ${index + 1}`}
-                  className="swiper-slide-image image object-contain mx-auto"
+                  className="swiper-slide-image image mx-auto aspect-4/3 w-full object-cover"
                 />
               </SwiperSlide>
             ))}
@@ -65,9 +66,9 @@ const RoomGallery = ({ room }) => {
               {room.images.map((image, index) => (
                 <SwiperSlide key={image} className="room-thumbs-swiper-slide">
                   <img
-                    src={`${API_URL}${image}`}
+                    src={imgUrl(image)}
                     alt={`${room.name} - miniatura ${index + 1}`}
-                    className="swiper-slide-thumb-image rounded-xl"
+                    className="swiper-slide-thumb-image mx-auto aspect-4/3 object-cover rounded-xl"
                   />
                 </SwiperSlide>
               ))}

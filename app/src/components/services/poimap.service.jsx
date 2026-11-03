@@ -31,62 +31,75 @@ const categoryConfig = {
     }
 }
 
+const buildPopupContent = (name, description) => {
+    const container = document.createElement("div")
+
+    const title = document.createElement("strong")
+    title.textContent = name ?? ""
+    container.appendChild(title)
+
+    if(description) {
+        const text = document.createElement("p")
+        text.textContent = description
+        container.appendChild(text)
+    }
+
+    return container
+}
 const Poimap = () => {
 
     const mapContainerRef = useRef(null);
-    const mapRef = useRef(null);
 
     const [activeCategories, setActiveCategories] = useState([])
 
     useEffect(() => {
-        const loadMap = async() => {
+
+        let cancelled = false
+
+        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
+
+        const propertyLocation = {
+            latitude: -22.823442065291548,
+            longitude: -42.20596293870038
+        }
+
+        const map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: "mapbox://styles/mapbox/streets-v12",
+            center: [
+                propertyLocation.longitude,
+                propertyLocation.latitude
+            ],
+            zoom: 14
+        })
+
+        // Casa Latina's Marker
+        new mapboxgl.Marker({ 
+            color: "#ff0000" 
+        })
+        .setLngLat([
+            propertyLocation.longitude,
+            propertyLocation.latitude
+        ]).setPopup(
+            new mapboxgl.Popup({ 
+                offset: 25 
+            }).setDOMContent(buildPopupContent("Casa Latina Experience"))
+        ).addTo(map)
+
+
+        const loadPoints = async () => {
             try {
-                mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
-
-                const propertyLocation = {
-                    latitude: -22.823442065291548,
-                    longitude: -42.20596293870038
-                }
-
-                mapRef.current = new mapboxgl.Map({
-                    container: mapContainerRef.current,
-                    style: "mapbox://styles/mapbox/streets-v12",
-                    center: [
-                        propertyLocation.longitude,
-                        propertyLocation.latitude
-                    ],
-                    zoom: 14
-                })
-
-                // Casa Latina's Marker
-                new mapboxgl.Marker({
-                    color: '#ff0000'
-                })
-                .setLngLat([
-                    propertyLocation.longitude,
-                    propertyLocation.latitude
-                ])
-                .setPopup(
-                    new mapboxgl.Popup({
-                        offset: 25
-                    }).setHTML(
-                        `<strong>Casa Latina Experience</strong>`
-                    )
-                )
-                .addTo(mapRef.current)
-
-                // get POIS
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pois`)
 
-                if(!response.ok){
-                    throw new Error('Cant get points of interest')
+                if(!response.ok) {
+                    throw new Error("Can't get points of interest")
                 }
 
                 const points = await response.json()
 
-                console.log("POIs recibidos: ", points)
+                if(cancelled) return
 
-                const bounds = new mapboxgl.LngLatBounds();
+                const bounds = new mapboxgl.LngLatBounds()
 
                 bounds.extend([
                     propertyLocation.longitude,
@@ -96,13 +109,10 @@ const Poimap = () => {
                 const categories = new Set()
 
                 points.forEach((point) => {
-
                     const coordinates = [
                         Number(point.longitude),
                         Number(point.latitude)
                     ]
-
-                    console.log(`Agregando ${point.name}: `, coordinates)
 
                     const config =
                         categoryConfig[point.category] ?? categoryConfig.other
@@ -110,6 +120,7 @@ const Poimap = () => {
                     categories.add(
                         categoryConfig[point.category] ? point.category : "other"
                     )
+
                     new mapboxgl.Marker({
                         color: config.color
                     })
@@ -117,38 +128,34 @@ const Poimap = () => {
                     .setPopup(
                         new mapboxgl.Popup({
                             offset: 25
-                        }).setHTML(`
-                            <strong>${point.name}</strong>
-                            <p>${point.description ?? ""}</p>
-                            `)
+                        }).setDOMContent(
+                            buildPopupContent(point.name, point.description)
+                        )
                     )
-                    .addTo(mapRef.current)
+                    .addTo(map)
 
                     bounds.extend(coordinates)
                 })
 
                 setActiveCategories([...categories])
 
-                if(points.length > 0){
-                    mapRef.current.fitBounds(bounds,{
+                if(points.length > 0) {
+                    map.fitBounds(bounds, {
                         padding: 80,
                         maxZoom: 15,
                         duration: 1000
                     })
                 }
-
-            } catch(e){
-                console.error("Error loading map: ", e)
+            } catch(e) {
+                if(!cancelled) console.error("Error loading POIs: ", e)
             }
         }
 
-        loadMap()
+        loadPoints()
 
         return () => {
-            if(mapRef.current) {
-                mapRef.current.remove()
-                mapRef.current = null
-            }
+            cancelled = true
+            map.remove()
         }
     }, [])
 
@@ -166,19 +173,18 @@ const Poimap = () => {
                         </h2>
 
                         <div className="flex flex-col gap-2">
-                            {/* Our marker */}
-                            <div className="flex items-center gap-2">
-                                <span
+                            <div className="flex items center gap-2">
+                                <span 
                                     className="h-4 w-6"
                                     style={{backgroundColor: "#ff0000"}}
-                                />
-
+                                    />
+                                
                                 <span className="text-sm text-white">
                                     Casa Latina
                                 </span>
                             </div>
 
-                            {/* Existing Categories Points */}
+                            {/*  Shows existing points */}
                             {activeCategories.map((category) => {
                                 const config =
                                     categoryConfig[category] ??
@@ -187,18 +193,15 @@ const Poimap = () => {
                                 return (
                                     <div
                                         key={category}
-                                        className="flex items-center gap-2"
-                                    >
-                                        <span 
-                                            className="h-4 w-6"
-                                            style={{
-                                                background:config.color
-                                            }}
-                                        />
+                                        className="flex items-center gap-2">
+                                            <span 
+                                                className="h-4 w-6"
+                                                style={{ background: config.color }}
+                                                />
 
-                                        <span className="text-sm text-white">
-                                            {config.label}
-                                        </span>
+                                            <span className="text-sm text-white">
+                                                {config.label}
+                                            </span>
                                     </div>
                                 )
                             })}

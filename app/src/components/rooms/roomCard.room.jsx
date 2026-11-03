@@ -12,9 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Amenities from "../services/amenities.service.jsx";
+import { imgUrl } from "../../utils/imgUrls.utils.jsx";
 import "./items.css";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const RoomCard = ({ room }) => {
   const navigate = useNavigate();
@@ -31,14 +30,14 @@ const RoomCard = ({ room }) => {
             <>
               <img
                 className="room-main-img"
-                src={`${API_URL}${room.images[0]}`}
+                src={imgUrl(room.images[0])}
                 alt={room.name}
               />
               <div className="room-small-img">
                 {room.images.slice(1, 4).map((image, index) => (
                   <img
                     key={image}
-                    src={`${API_URL}${image}`}
+                    src={imgUrl(image)}
                     alt={`${room.name} ${index + 2}`}
                     className="small-img"
                   />
@@ -80,6 +79,8 @@ const RoomCard = ({ room }) => {
       </div>
     </>
   );
+  console.log("images:", room.name, room.images);
 };
+
 
 export default RoomCard;
