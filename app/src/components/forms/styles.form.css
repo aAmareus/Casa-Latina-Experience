@@ -33,14 +33,14 @@
     pointer-events: none;
 }
 
-.form-btn {
+.contact-form-btn {
     background: var(--btn-light);
     border: var(--btn) 1px solid;
     color: var(--btn-light-txt);
     transition: all .2s ease;
 }
 
-.form-btn:hover {
+.contact-form-btn:hover {
     background: var(--btn);
     color: var(--btn-txt);
     border: var(--btn-light) 1px solid;
@@ -62,6 +62,10 @@
 
 .sign-in-form {
     background: var(--white-bg);
+}
+
+.login-input {
+    background: var(--light-bg);
 }
 
 .panel-title {

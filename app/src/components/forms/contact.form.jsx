@@ -208,7 +208,7 @@ const Contact = () => {
           <button
             type="submit"
             disabled={loading || !turnstileToken}
-            className="form-btn w-full p-3 mt-3 rounded-[5px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="contact-form-btn w-full p-3 mt-3 rounded-[5px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Enviando" : "Enviar"}
           </button>

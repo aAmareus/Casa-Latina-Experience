@@ -33,8 +33,8 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="toLogin flex gap-2">
-        {loading &&
+      <div className="toLogin flex justify-center items-center gap-2">
+        {!loading &&
           (user ? (
             <>
               <span classname="mr-2">
@@ -42,7 +42,7 @@ const Navbar = () => {
               </span>
 
               {user.rol === "admin" && (
-                <a href="#">Panel</a> // Add dashboard url once the admin panel is ready!
+                <a href="#" className="toPanel-btn px-4 py-1.5 rounded-sm transition-all">Panel</a> // Add dashboard url once the admin panel is ready!
               )}
 
               <button

@@ -122,7 +122,7 @@ svg.footer-icon {
 .navbar {
     color: var(--primary-txt);
     background: var(--white-bg);
-    border-bottom: 1px solid var(--primary-shadow);
+    box-shadow: 0 1px 3px var(--primary-border);
     z-index: 20;
 }
 
@@ -161,6 +161,7 @@ svg.footer-icon {
 
 .main-btn {
     background: var(--btn);
+    border: 1px solid var(--btn);
     color: var(--btn-txt);
     z-index: 1 !important;
 }
@@ -171,11 +172,20 @@ svg.footer-icon {
 }
 
 .main-btn:hover {
-    background: transparent;
     color: var(--btn-light-txt);
     border: 1px solid var(--btn);
 }
 
 .main-btn:hover::after {
     width: 100%;
+}
+
+.toPanel-btn {
+    background: var(--white-bg);
+    border: 1px solid var(--btn);
+}
+
+.toPanel-btn:hover {
+    color: var(--hover-lbl);
+    border: 1px solid var(--hover-lbl);
 }

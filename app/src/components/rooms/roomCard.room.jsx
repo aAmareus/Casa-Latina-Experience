@@ -24,12 +24,12 @@ const RoomCard = ({ room }) => {
 
   return (
     <>
-      <div className="room-card flex gap-4 p-4 rounded w-[90%] max-w-300 mx-auto">
+      <div className="room-card flex gap-4 p-4 rounded w-[90%] max-w-300 mx-auto ">
         <div className="room-card-img">
           {room.images?.length > 0 ? (
             <>
               <img
-                className="room-main-img"
+                className="room-main-img object-cover aspect-4/3"
                 src={imgUrl(room.images[0])}
                 alt={room.name}
               />
@@ -39,7 +39,7 @@ const RoomCard = ({ room }) => {
                     key={image}
                     src={imgUrl(image)}
                     alt={`${room.name} ${index + 2}`}
-                    className="small-img"
+                    className="small-img aspect-3/4 object-cover"
                   />
                 ))}
               </div>

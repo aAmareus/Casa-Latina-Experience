@@ -1,7 +1,7 @@
 .room-card {
     height: auto;
     width: calc(var(--max-dv-w) - 700px);
-    border: 1px solid var(--primary-border);
+    background: var(--light-bg);
 }
 
 .room-card-img {

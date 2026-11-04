@@ -49,8 +49,7 @@ function App() {
           <Route path="/catalogo/rooms/:id" element={<RoomDetail />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </PageTransition>
-      */}
+      </PageTransition> */}
 
     </>
   )
