@@ -6,7 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const categoryConfig = {
     beach: {
-        label: "playa",
+        label: "Playa",
         color: "#00b7ff"
     },
     restaurant: {

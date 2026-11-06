@@ -4,7 +4,6 @@ import MainHero from "../navigation/mainHero.nav.jsx";
 import Navbar from "../navigation/navbar.nav.jsx";
 import ContactForm from "../forms/contact.form.jsx";
 import Catalogo from "../navigation/catalogo.nav.jsx";
-import Contact from "../forms/contact.form.jsx";
 import Poimap from "../services/poimap.service.jsx";
 import Aboutus from "../navigation/aboutUs.nav.jsx";
 import Footer from "../navigation/footer.nav.jsx";

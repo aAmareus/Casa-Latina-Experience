@@ -10,8 +10,7 @@ import Bookingmodal from "../reservations/bookingmodal.jsx";
 import "./roomdetail.css";
 
 import { getRoomById } from "../../../api/rooms.api.js";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { useAuth } from "../../context/auth.context.jsx"
 
 const RoomDetail = () => {
   const { id } = useParams();
@@ -19,56 +18,27 @@ const RoomDetail = () => {
   const [room, setRoom] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [bookingError, setBookingError] = useState(null)
 
   const [showModal, setShowModal] = useState(false)
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [checkingSession, setCheckingSession] = useState(false)
+  const { user, loading: authLoading } = useAuth()
 
   const handleBooking = async () => {
 
-    if(checkingSession) return
+    // Verification via authProvider
+    if(authLoading) return
 
-    setBookingError(null);
-    setCheckingSession(true)
-
-    try {
-      const response = await fetch(
-        `${API_URL}/api/users/profile`,
-        {
-          credentials: "include"
-        }
-      )
-
-      if(response.ok) {
-        setShowModal(true)
-        return
-      }
-
-      if(response.status === 401 || response.status === 403) {
-        navigate("/login",
-          {
-            state: {
-              from: location.pathname,
-              openBooking: true
-            }
-          }
-        )
-
-        return
-      }
-
-      throw new Error(`Error HTTP ${response.status}`)
-    } catch(error) {
-      console.error("Error verificando sesión: ", error)
-
-      setBookingError("No pudimos verificar tu sesión. Inténtalo nuevamente. ")
-    } finally {
-      setCheckingSession(false)
+    if(user) {
+      setShowModal(true)
+      return
     }
+      
+    navigate("/login", {
+      state: { from: location.pathname, openBooking: true }
+    })
   }
 
   useEffect(() => {
@@ -90,43 +60,23 @@ const RoomDetail = () => {
 
   useEffect(() => {
     if(
+      authLoading ||
+      !room ||
+      !user ||
       location.state?.openBooking !== true ||
-      location.state?.from !== location.pathname ||
-      !room
+      location.state?.from !== location.pathname
     ) {
       return
     }
 
-    let cancelled = false
+    setShowModal(true)
 
-    const resumeBooking = async () => {
-      try {
-        const response = await fetch(
-          `${API_URL}/api/users/profile`,
-          {
-            credentials: "include"
-          }
-        )
+    navigate(location.pathname, {
+      replace: true,
+      state: null,
+    })
 
-        if(!cancelled && response.ok) {
-          setShowModal(true)
-
-          navigate(location.pathname, {
-            replace: true,
-            state: null
-          })
-        }
-      } catch(error) {
-        console.error("Error recuperando reserva: ", error)
-      }
-    }
-
-    resumeBooking()
-
-    return () => {
-      cancelled = true
-    }
-  }, [room, location, navigate])
+  }, [authLoading, room, user, location, navigate])
 
   if (loading) {
     return <p>Cargando habitación...</p>;
@@ -198,14 +148,9 @@ const RoomDetail = () => {
 
           <button 
             className="w-[50%] mx-auto py-2 select-btn btn cursor-pointer rounded-xl"
-            disabled={checkingSession}
+            disabled={authLoading}
             onClick={handleBooking}
             >Quiero reservar!</button>
-            {bookingError && (
-              <p role="alert" className="text-sm text-red-600 text-center">
-                {bookingError}
-              </p>
-            )}
         </div>
       </div>
 

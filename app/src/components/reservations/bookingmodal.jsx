@@ -83,7 +83,7 @@ const Bookingmodal = ({ room, onClose }) => {
 
                 <p >
                   {details.nights} {details.nights === 1 ? "noche" : "noches"}
-                  {"*"}
+                  {" x "}
                   R${details.pricePerNight.toLocaleString("es-CL")}
                 </p>
               </div>
@@ -111,10 +111,10 @@ const Bookingmodal = ({ room, onClose }) => {
 
         <div className="quote-total">
           <div className="flex">
-            <strong>Total</strong>
+            <strong>Total: &nbsp;</strong>
 
             <span>
-              {quote.numberOfNights}{" "}
+               {quote.numberOfNights}{" "}
               {quote.numberOfNights === 1 ? "noche" : "noches"}
             </span>
           </div>
@@ -178,7 +178,7 @@ const Bookingmodal = ({ room, onClose }) => {
           
           <hr />
 
-          <h2>Tu reserva</h2>   
+          <h2 className="font-semibold text-2xl">Tu reserva</h2>   
 
           {!range?.from && (
             <p className="booking-help">
