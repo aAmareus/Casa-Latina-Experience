@@ -1,15 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faWaterLadder,
-  faMugHot,
-  faWind,
-  faCar,
-  faBurger,
-  faLayerGroup,
-  faWifi,
-  faHandHoldingHeart,
-} from "@fortawesome/free-solid-svg-icons";
 
 import Amenities from "../services/amenities.service.jsx";
 import { imgUrl } from "../../utils/imgUrls.utils.jsx";
@@ -24,8 +13,8 @@ const RoomCard = ({ room }) => {
 
   return (
     <>
-      <div className="room-card flex gap-4 p-4 rounded w-[90%] max-w-300 mx-auto ">
-        <div className="room-card-img">
+      <div className="room-card flex gap-4 p-4 rounded w-[90%] mx-auto">
+        <div className="room-card-img h-[90%] w-1/3">
           {room.images?.length > 0 ? (
             <>
               <img
@@ -52,7 +41,7 @@ const RoomCard = ({ room }) => {
         <div className="room-card-info flex flex-col justify-between p-6 items-center w-2/3">
           <div className="room-card-info-values w-full flex flex-col gap-0.5">
             <h2 className="room-title font-bold text-3xl">{room.name}</h2>
-            <p className="room-desc text">{room.description}</p>
+            <p className="room-desc text text-wrap">{room.description}</p>
             <br />
             <span className="room-cap text">
               Capacidad: {room.capacity} personas.
