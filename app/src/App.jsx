@@ -2,11 +2,11 @@ import { Routes, Route } from 'react-router-dom'
 import Logo from './assets/icons/logotipo-wobg.png'
 
 // pages for da web
-import Index from './components/pages/index.page.jsx'
-import Admin from "./components/pages/admin.page.jsx"
-import Dashboard from "./components/pages/dashboard.page.jsx"
-import RoomDetail from "./components/pages/RoomDetail.page.jsx"
-import Login from "./components/pages/login.page.jsx"
+import Index from "./pages/index.page.jsx"
+import Admin from "./pages/admin.page.jsx"
+import Dashboard from "./pages/dashboard.page.jsx"
+import RoomDetail from "./pages/RoomDetail.page.jsx"
+import Login from "./pages/login.page.jsx"
 
 import PageTransition from './components/curtain/PageTransition.jsx'
 

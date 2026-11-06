@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../pages/admin.css";
+import "../../pages/admin.css";
 
 const Menu = () => {
   return (
