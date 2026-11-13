@@ -6,7 +6,7 @@ import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/navigation"
 
-import { getRooms } from "../../../api/rooms.api.js"
+import { getRooms } from "../../api/rooms.api.js"
 import RoomCard from "../rooms/roomCard.room.jsx"
 
 const Catalogo = () => {

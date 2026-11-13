@@ -7,6 +7,7 @@ import Admin from "./pages/admin.page.jsx"
 import Dashboard from "./pages/dashboard.page.jsx"
 import RoomDetail from "./pages/RoomDetail.page.jsx"
 import Login from "./pages/login.page.jsx"
+import Checkout from "./pages/checkout.page.jsx"
 
 import PageTransition from './components/curtain/PageTransition.jsx'
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/catalogo/rooms/:id" element={<RoomDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="reserva/:id/pago" element={<Checkout />}/>
         </Routes>
       </PageTransition>
 

@@ -10,4 +10,13 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
-})
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://api.casalatina-experience.com",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
+});

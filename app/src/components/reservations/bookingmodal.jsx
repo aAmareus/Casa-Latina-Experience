@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 
-import { quoteReserva } from "../../../api/reservas.api.js";
+import { quoteReserva, createReserva } from "../../api/reservas.api.js";
 
 import "./bookingmodal.css";
 
@@ -13,11 +14,17 @@ const Bookingmodal = ({ room, onClose }) => {
   const [quote, setQuote] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [creating, setCreating] = useState(false)
+
+
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     if (!range?.from || !range?.to) {
       setQuote(null);
-      return;
+      setError(null)
+      return
     }
 
     const loadQuote = async () => {
@@ -41,6 +48,41 @@ const Bookingmodal = ({ room, onClose }) => {
 
     loadQuote();
   }, [range, room._id]);
+
+
+  /* ================================
+  
+  NEED TO ADD HANDLECONTINUE FX HERE AND REVIEW THE FILE LOOKING FOR CHANGES
+  
+  ================================ */
+  const handleContinue = async () => {
+    if(!range?.from || !range?.to || !quote || creating) return
+
+    try {
+      setCreating(true)
+      setError(null)
+
+      const data = await createReserva(
+        room._id,
+        formatDate(range.from),
+        formatDate(range.to),
+      )
+
+      navigate(`/reserva/${data.reserva._id}/pago`)
+    } catch(e) {
+      if(e.status === 401) {
+        navigate("/login",{
+          state: { from: location.pathname, openBooking: true },
+        })
+
+        return
+      }
+
+      setError(e.message)
+    } finally {
+      setCreating(false)
+    }
+  }
 
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -195,6 +237,17 @@ const Bookingmodal = ({ room, onClose }) => {
           {error && <div className="booking-error">{error}</div>}
 
           {quote && <QuoteSummary quote={quote} />}
+
+          {quote && (
+            <button
+              type="button"
+              className="btn select-btn mt-4 w-full cursor-pointer rounded-xl py-2 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={handleContinue}
+              disabled={creating}
+              >
+              {creating ? "Reservando..." : "Continuar con el pago"}
+            </button>
+          )}
         </div>
       </div>
     </div>

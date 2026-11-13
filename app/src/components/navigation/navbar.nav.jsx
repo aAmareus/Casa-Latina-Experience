@@ -37,7 +37,7 @@ const Navbar = () => {
         {!loading &&
           (user ? (
             <>
-              <span classname="mr-2">
+              <span className="mr-2">
                 Hola, <strong>{user.name}</strong>
               </span>
 

@@ -9,7 +9,7 @@ import Poi from "../components/services/poimap.service.jsx"
 import Bookingmodal from "../components/reservations/bookingmodal.jsx";
 import "./roomdetail.css";
 
-import { getRoomById } from "../../api/rooms.api.js";
+import { getRoomById } from "../api/rooms.api.js";
 import { useAuth } from "../context/auth.context.jsx"
 
 const RoomDetail = () => {
