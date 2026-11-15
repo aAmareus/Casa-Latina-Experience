@@ -4,6 +4,7 @@ const request = async (path, options = {}) => {
     const response = await fetch(`${API_URL}${path}`, {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
+        cache: "no-store",
         ...options
     })
 

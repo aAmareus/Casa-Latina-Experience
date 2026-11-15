@@ -90,21 +90,28 @@ const Checkout = () => {
         const data = await createPaypalOrder(id)
 
         // si cambió la conversión mientras carga, se muestra lo que se va a cobrar
-        setCheckout((current) => ({ ...current, pricing: data.pricing }))
+        setCheckout((current) => (current ? { ...current, pricing: data.pricing } : current))
 
         return { orderId: data.orderId }
     }
 
     const handleApprove = async ({ orderId }) => {
-        const result = await capturePaypalOrder(orderId)
+        try {
+            const result = await capturePaypalOrder(orderId)
 
-        if(result.pending_review) {
-            setNotice({ type: "info", text: result.message })
-            return
+
+            if(result?.pending_review) {
+                setNotice({ type: "info", text: result.message })
+                return
+            }
+
+            const data = await getCheckout(id)
+            setCheckout(data.checkout)
+
+        } catch(e) {
+            setNotice({ type: "error", text: e.message })
         }
 
-        const data = await getCheckout(id)
-        setCheckout(data.checkout)
     }
 
     const handlePaymentError = (e) => {
@@ -140,7 +147,7 @@ const Checkout = () => {
         return <p className="p-20 text-center">Cargando tu reserva...</p>
     }
 
-    if(error || !checkout) {
+    if(error || !checkout?.reservation) {
         return (
             <div className="mx-auto max-w-xl p-20 text-center">
                 <p className="mb-6">{error ?? "No encontramos esta reserva."}</p>
