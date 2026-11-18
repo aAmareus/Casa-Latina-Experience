@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Link } from "react-router-dom"
 import { Turnstile } from "@marsidev/react-turnstile"
+import { notify } from "../../utils/notify.utils.js"
 import "./styles.form.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,44 +41,34 @@ const Contact = () => {
     if(loading) return
 
     if(!turnstileToken) {
-      setFeedback({
-        type: "error",
-        message: "Completa la verificación de seguridad."
-      })
+      notify.warning("Completa la verificación de seguridad",
+        "marca la casilla antes de enviar tu mensaje."
+      )
+
+      return
     }
 
     setLoading(true)
-    setFeedback(null)
 
     try {
-      console.log("Datos enviados:", formData)
       const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          ...formData,
-        turnstileToken
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, turnstileToken })
       })
 
       const data = await response.json()
 
       if(!response.ok) {
-        setFeedback({
-          type: "error",
-          message: data.message || "No se pudo enviar la consulta."
-        })
-
+        notify.messageError(data.message)
         return
       }
 
-      setFeedback({
-        type: data.email_status === "failed" ? "warning" : "success",
-        message: data.message,
-        consultationId: data.consultation_id
-      })
+      if(data.email_status === "failed") {
+        notify.messageRecievedNoEmail(data.message)
+      } else {
+        notify.messageSent(data.consultation_id)
+      }
 
       setFormData({
         name: "",
@@ -85,14 +76,12 @@ const Contact = () => {
         subject: "",
         message: ""
       })
+
     } catch(error) {
       console.log("Error enviando consulta: ", error)
-
-      setFeedback({
-        type: "error",
-        message: "No se pudo conectar con el servidor. Intente nuevamente."
-      })
+      notify.messageError("No se pudo conectar con el servidor. Inténtalo nuevamente.")
     }
+    
     finally {
       setLoading(false)
       setTurnstileToken("")

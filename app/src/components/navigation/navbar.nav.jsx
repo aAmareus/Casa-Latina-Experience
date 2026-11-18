@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth.context.jsx";
+import { notify } from "../../utils/notify.utils.js"
 import "./navigation.css";
 
 const Navbar = () => {
@@ -19,9 +20,10 @@ const Navbar = () => {
     setLoggingOut(false);
 
     if (closed) {
+      notify.logoutSuccess()
       navigate("/");
     } else {
-      alert("Error al cerrar sesión. Intente nuevamente.");
+      notify.logoutError()
     }
   };
 

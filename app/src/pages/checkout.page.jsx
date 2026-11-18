@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
+import { IDLE_FETCHER, Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import { PayPalProvider, PayPalOneTimePaymentButton } from "@paypal/react-paypal-js/sdk-v6"
 
 import { useAuth } from "../context/auth.context.jsx"
@@ -10,8 +10,15 @@ import { cancelReserva } from "../api/reservas.api.js"
 const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID
 const PAYPAL_ENV = import.meta.env.VITE_PAYPAL_ENV === "production" ? "production" : "sandbox"
 
-const brl = new Intl.NumberFormat("es-CL", { style: "currency", currency: "BRL" })
-const usd = new Intl.NumberFormat("es-CL", { style: "currency", currency: "USD" })
+
+const money = (value) =>
+    Number(value).toLocaleString("es-CL", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })
+
+const brl = { format: (value) => `R$ ${money(value)}` }
+const usd = { format: (value) => `US$ ${money(value)}` };
 
 const formatRate = (rate) => 
     Number(rate).toLocaleString("es-CL", {
@@ -29,7 +36,7 @@ const formatDate = (value) =>
     }).format(new Date(value))
 
 const formatTime = (value) => 
-    new Intl.DateTimeFormat("es-CL", { hour: "2-digit", minute: "2-digit" }).format(
+    new Intl.DateTimeFormat("es-CL", { hour: "2-digit", minute: "2-digit", hour12: false }).format(
         new Date(value),
     )
 
@@ -38,6 +45,27 @@ const Card = ({ children, className= "" }) => (
         {children}
     </section>
 )
+
+// Avisa el resultado del pago
+const BANNER_STYLES = {
+    success: "border-green-600 bg-green-100 text-green-900",
+    warning: "border-amber-500 bg-amber-100 text-amber-900",
+    error: "border-red-600 bg-red-100 text-red-900",
+    info: "border-blue-600 bg-blue-100 text-blue-900"
+}
+
+const Banner = ({ result }) => {
+    if(!result) return null
+
+    return (
+        <div
+            role={result.type === "success" || result.type === "info" ? "status" : "alert"}
+            className={`rounded-xl border-l-4 p-4 ${BANNER_STYLES[result.type]}`}
+        >
+            <p className="font-bold">{result.title}</p>
+        </div>
+    )
+}
 
 const Checkout = () => {
     const { id } = useParams()
@@ -48,7 +76,7 @@ const Checkout = () => {
     const [checkout, setCheckout] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [notice, setNotice] = useState(null)
+    const [paymentResult, setPaymentResult] = useState(null)
     const [cancelling, setCancelling] = useState(false)
 
     // Sin sesión -> login y vuelta acá.
@@ -84,29 +112,79 @@ const Checkout = () => {
         }
     }, [id, authLoading, user])
 
+
+    const refreshCheckout = async () => {
+        try {
+            const data = await getCheckout(id)
+            if(data?.checkout?.reservation) setCheckout(data.checkOut)
+        } catch {
+            // keeps what its showing
+        }
+    }
+
     const handleCreateOrder = async () => {
-        setNotice(null)
+        setPaymentResult(null)
 
-        const data = await createPaypalOrder(id)
+        try {
+            const data = await createPaypalOrder(id)
 
-        // si cambió la conversión mientras carga, se muestra lo que se va a cobrar
-        setCheckout((current) => (current ? { ...current, pricing: data.pricing } : current))
+            // si cambió la conversión mientras carga, se muestra lo que se va a cobrar
+            setCheckout((current) => (current ? { ...current, pricing: data.pricing } : current))
+            return { orderId: data.orderId }
+        } catch(e) {
+            setPaymentResult({
+                type: "error",
+                title: "No pudimos iniciar el pago",
+                text: e.message
+            })
 
-        return { orderId: data.orderId }
+            if(e.status === 409 || e.status === 410) refreshCheckout()
+
+            throw e
+        }
+
+        
     }
 
     const handleApprove = async ({ orderId }) => {
+        setPaymentResult(null)
         try {
             const result = await capturePaypalOrder(orderId)
 
 
             if(result?.pending_review) {
-                setNotice({ type: "info", text: result.message })
+                setPaymentResult({
+                    type: "info",
+                    title: "Tu pago está en revisión",
+                    text: result.message
+
+                })
+
                 return
             }
 
-            const data = await getCheckout(id)
-            setCheckout(data.checkout)
+            setCheckout((current) =>
+                current?.reservation
+                ? {
+                    ...current,
+                    reservation: {
+                        ...current.reservation,
+                        estado: "confirmada",
+                        hold_expires_at: null
+                    }
+                }
+                : null
+        )
+
+        setPaymentResult({
+            type: "success",
+            title: "¡Pago completado!",
+            text: user?.email
+                ? `Te enviamos un correo de confirmación a ${user.email}.`
+                : "Te enviaremos un correo de confirmación."
+        })
+
+        faWindows.scrollTo({ top: 0, behavior: "smooth" })
 
         } catch(e) {
             setNotice({ type: "error", text: e.message })

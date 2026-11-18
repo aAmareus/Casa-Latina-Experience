@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth.context.jsx";
+import { notify } from "../../utils/notify.utils.js"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -74,7 +75,6 @@ const SignForm = () => {
   const [phone, setPhone] = useState("")
   const [pwd, setPwd] = useState("");
 
-  const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
   const handleSignIn = async (e) => {
@@ -83,7 +83,6 @@ const SignForm = () => {
     if(submitting) return
 
     setSubmitting(true)
-    setError(null)
 
     try {
         const response = await fetch(`${API_URL}/api/users/login`, {
@@ -110,20 +109,19 @@ const SignForm = () => {
             return
         }
 
-        alert("Inicio de sesión exitoso!"); // Esto se eliminaría
         const from = location.state?.from ?? "/"
         login(data.user)
         setEmail("");
         setPwd("");
+        notify.loginSuccess()
 
-        setIsSignUp(false); // Esto también se iría
         navigate(from,{
           replace: true,
           state: location.state?.openBooking ? { from, openBooking: true } : null
         })
     } catch(error) {
         console.error("Error al iniciar sesión:", error)
-        setError("No se pudo conectar al servidor.")
+        notify.loginError("No se pudo conectar con el servidor.")
     } finally {
         setSubmitting(false)
     }
@@ -135,7 +133,6 @@ const SignForm = () => {
     if(submitting) return
 
     setSubmitting(true)
-    setError(null)
     
     try {
         const response = await fetch(`${API_URL}/api/users`, {
@@ -164,18 +161,17 @@ const SignForm = () => {
 
             return
         }
-
-        alert("Usuario registrado exitosamente!")
         setName("") 
         setLastName("")
         setPhone("")
         setEmail("")
         setPwd("")
 
+        notify.sigUnSuccess()
         setIsSignUp(false)
     } catch(error) {
         console.error("Error en la petición: ", error)
-        setError("No se pudo conectar con el servidor.")
+        notify.signUpError("No se pudo conectar con el servidor.")
     } finally {
         setSubmitting(false)
     }
@@ -268,11 +264,6 @@ const SignForm = () => {
               />
             </div>
 
-            {error && (
-              <p role="alert" className="text-sm text-red-600">
-                {error}
-              </p>
-            )}
             <button type="submit" className={`${btnSolid} form-btn`}>
               Ingresar
             </button>
@@ -361,11 +352,6 @@ const SignForm = () => {
               />
             </div>
 
-            {error && (
-              <p role="alert" className="text-sm text-red-600">
-                {error}
-              </p>
-            )}
             <button type="submit" className={`${btnSolid} form-btn`}>
               Registrarse
             </button>
@@ -391,7 +377,7 @@ const SignForm = () => {
             <button
               type="button"
               className={`${btnTransparent} panel-btn`}
-              onClick={() => {setIsSignUp(true); setError(null)}}
+              onClick={() => {setIsSignUp(true)} }
             >
               regístrame
             </button>
@@ -422,7 +408,7 @@ const SignForm = () => {
             <button
               type="button"
               className={`${btnTransparent} panel-btn`}
-              onClick={() => {setIsSignUp(false); setError(null)}}
+              onClick={() => {setIsSignUp(false)}}
             >
               Iniciar sesión
             </button>

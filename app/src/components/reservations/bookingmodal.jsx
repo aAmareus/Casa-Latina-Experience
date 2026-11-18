@@ -6,6 +6,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 
 import { quoteReserva, createReserva } from "../../api/reservas.api.js";
+import { notify } from "../../utils/notify.utils.js"
 
 import "./bookingmodal.css";
 
@@ -71,14 +72,16 @@ const Bookingmodal = ({ room, onClose }) => {
       navigate(`/reserva/${data.reserva._id}/pago`)
     } catch(e) {
       if(e.status === 401) {
-        navigate("/login",{
-          state: { from: location.pathname, openBooking: true },
+        notify.info("Inicia sesión para continuar", "Después volverás a tu reserva.")
+        navigate("/login", {
+          state: { from: location.pathname, openBooking: true }
         })
 
         return
+
       }
 
-      setError(e.message)
+      notify.reservationError(e.message)
     } finally {
       setCreating(false)
     }
@@ -135,7 +138,7 @@ const Bookingmodal = ({ room, onClose }) => {
           ))}
         </div>
 
-        {quote.discountpercentage > 0 && (
+        {quote.discountPercentage > 0 && (
           <div className="quote-description">
             <div className="quote-row">
               <span>Subtotal: </span>
@@ -144,7 +147,7 @@ const Bookingmodal = ({ room, onClose }) => {
             </div>
 
             <div className="quote-row quote-discount">
-              <span>Descuento: ({quote.discountpercentage}%)</span>
+              <span>Descuento: ({quote.discountPercentage}%)</span>
 
               <span>- R${quote.discountAmount.toLocaleString("es-CL")}</span>
             </div>
@@ -228,7 +231,7 @@ const Bookingmodal = ({ room, onClose }) => {
             </p>
           )}
 
-          {!range?.from && !range?.to && (
+          {range?.from && !range?.to && (
             <p className="booking-help">Ahora selecciona la fecha de salida.</p>
           )}
 
