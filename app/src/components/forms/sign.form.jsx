@@ -100,10 +100,10 @@ const SignForm = () => {
         const data = await response.json()
 
         if(!response.ok) {
-            setError(
+            notify.loginError(
               data.errors
-                ? Object.values(data.errors).join(" ")
-                : data.message || "No se pudo iniciar sesión.",
+              ? Object.values(data.errors).join(" ")
+              : data.message
             )
 
             return
@@ -153,10 +153,10 @@ const SignForm = () => {
         const data = await response.json()
 
         if(!response.ok) {
-            setError(
-                data.errors
-                    ? Object.values(data.errors).join(" ")
-                    : data.message || "No se pudo registrar el usuario."
+            notify.signUpError(
+              data.errors
+              ? Object.values(data.errors).join(" ")
+              : data.message
             )
 
             return
@@ -167,7 +167,7 @@ const SignForm = () => {
         setEmail("")
         setPwd("")
 
-        notify.sigUnSuccess()
+        notify.signUpSuccess()
         setIsSignUp(false)
     } catch(error) {
         console.error("Error en la petición: ", error)

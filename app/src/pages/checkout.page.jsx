@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
-import { IDLE_FETCHER, Link, useLocation, useNavigate, useParams } from "react-router-dom"
+import { useEffect, useState, useRef } from "react"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import { PayPalProvider, PayPalOneTimePaymentButton } from "@paypal/react-paypal-js/sdk-v6"
 
 import { useAuth } from "../context/auth.context.jsx"
 import { imgUrl } from "../utils/imgUrls.utils.jsx"
 import { getCheckout, createPaypalOrder, capturePaypalOrder } from "../api/payments.api.js"
 import { cancelReserva } from "../api/reservas.api.js"
+import { notify } from "../utils/notify.utils.js"
 
 const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID
 const PAYPAL_ENV = import.meta.env.VITE_PAYPAL_ENV === "production" ? "production" : "sandbox"
@@ -76,8 +77,11 @@ const Checkout = () => {
     const [checkout, setCheckout] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [paymentResult, setPaymentResult] = useState(null)
     const [cancelling, setCancelling] = useState(false)
+
+    // Evita mostrar dos avisos de error por el mismo intento de pago
+    const errorShown = useRef(false)
+
 
     // Sin sesión -> login y vuelta acá.
     useEffect(() => {
@@ -123,20 +127,18 @@ const Checkout = () => {
     }
 
     const handleCreateOrder = async () => {
-        setPaymentResult(null)
+        errorShown.current = false
 
         try {
             const data = await createPaypalOrder(id)
 
             // si cambió la conversión mientras carga, se muestra lo que se va a cobrar
             setCheckout((current) => (current ? { ...current, pricing: data.pricing } : current))
+
             return { orderId: data.orderId }
         } catch(e) {
-            setPaymentResult({
-                type: "error",
-                title: "No pudimos iniciar el pago",
-                text: e.message
-            })
+            errorShown.current = true
+            notify.paymentError(e.message)
 
             if(e.status === 409 || e.status === 410) refreshCheckout()
 
@@ -147,18 +149,13 @@ const Checkout = () => {
     }
 
     const handleApprove = async ({ orderId }) => {
-        setPaymentResult(null)
+        errorShown.current = false
         try {
             const result = await capturePaypalOrder(orderId)
 
 
             if(result?.pending_review) {
-                setPaymentResult({
-                    type: "info",
-                    title: "Tu pago está en revisión",
-                    text: result.message
-
-                })
+                notify.paymentReview(result.message)
 
                 return
             }
@@ -173,34 +170,37 @@ const Checkout = () => {
                         hold_expires_at: null
                     }
                 }
-                : null
+                : current
         )
 
-        setPaymentResult({
-            type: "success",
-            title: "¡Pago completado!",
-            text: user?.email
-                ? `Te enviamos un correo de confirmación a ${user.email}.`
-                : "Te enviaremos un correo de confirmación."
-        })
+        notify.paymentSuccess(user?.email)
 
-        faWindows.scrollTo({ top: 0, behavior: "smooth" })
+        window.scrollTo({ top: 0, behavior: "smooth" })
 
+        // Después se actualizan los montos reales cobrados.
+        refreshCheckout()
         } catch(e) {
-            setNotice({ type: "error", text: e.message })
+            errorShown.current = true
+            notify.paymentError(e.message)
         }
+    }
 
+    const handleCancelPayment = () => {
+        notify.paymentCancelled()
     }
 
     const handlePaymentError = (e) => {
         console.error("Paypal error: ", e)
-        setNotice({
-            type: "error",
-            text:
-              e?.code === "INSTRUMENT_DECLINED"
-              ? e.message
-              : "No pudimos completar el pago. No se realizó ningún cobro, inténtalo nuevamente."
-        })
+
+        // Si ya se avisó un error mas específico, no se repite.
+        if(errorShown.current) return
+
+        errorShown.current = true
+        notify.paymentError(
+            e?.code === "INSTRUMENT_DECLINED"
+            ? e.message
+            : "No se realizó ningún cobro. Inténtalo nuevamente."
+        )
     }
 
     const handleCancelReservation = async () => {
@@ -214,8 +214,9 @@ const Checkout = () => {
                 ...current,
                 reservation: { ...current.reservation, estado: "cancelada" },
             }))
+            notify.reservationCancelled()
         } catch(e) {
-            setNotice({ type: "error", text: e.message })
+            notify.reservationCancelError(e.message)
         } finally {
             setCancelling(false)
         }
@@ -369,14 +370,6 @@ const Checkout = () => {
                     </p>
                 )}
 
-                {notice && (
-                    <p
-                       role="alert"
-                       className={`mb-4 rounded-lg p-3 text-sm ${notice.type === "error" ? "bg-red-100" : "bg-blue-100"}`}>
-                        {notice.text}
-                    </p>
-                )}
-
                 {PAYPAL_CLIENT_ID ? (
                     <PayPalProvider
                         clientId={PAYPAL_CLIENT_ID}
@@ -387,12 +380,7 @@ const Checkout = () => {
                         <PayPalOneTimePaymentButton
                             createOrder={handleCreateOrder}
                             onApprove={handleApprove}
-                            onCancel={() => {
-                                setNotice({
-                                    type: "info",
-                                    text: "Cerraste PayPal sin pagar. Tu reserva sigue pendiente, puedes intentar de nuevo."
-                                })
-                            }}
+                            onCancel={handleCancelPayment}
                             onError={handlePaymentError}
                         />
                     </PayPalProvider>

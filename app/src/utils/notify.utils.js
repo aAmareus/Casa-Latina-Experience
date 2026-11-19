@@ -30,8 +30,8 @@ export const notify = {
     reservationCancelError: (reason) => error("No se pudo cancelar la reserva", reason),
 
     // ----- Pagos -----
-    paymentSuccess: (email) => success("pago completado", email ? `Te enviamos un correo de confirmación a ${email}.` : undefined),
-    paymentCancelled: () => warning("pago cancelado", "No se realizó ningún cobro. Tu reserva sigue pendiente."),
+    paymentSuccess: (email) => success("Pago completado", email ? `Te enviamos un correo de confirmación a ${email}.` : undefined),
+    paymentCancelled: () => warning("Pago cancelado", "No se realizó ningún cobro. Tu reserva sigue pendiente."),
     paymentReview: (reason) => info("Tu pago está en revisión", reason),
     paymentError: (reason) => error("No se pudo procesar el pago", reason),
 

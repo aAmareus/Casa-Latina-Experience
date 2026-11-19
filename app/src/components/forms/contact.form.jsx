@@ -159,7 +159,7 @@ const Contact = () => {
                 className="form-input h-10 w-full outline-none"
               />
               <label
-                htmlFor="subject"
+                htmlFor="contact-subject"
                 className="lbl absolute left-4 top-2.5"
               >
                 Asunto
