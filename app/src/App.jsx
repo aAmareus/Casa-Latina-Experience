@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      {/* <div className="workingOn"
+      <div className="workingOn"
       style={{width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent:'center',alignItems:'center', gap: '20px', position: 'absolute'}}
       >
         <img src={Logo} alt="" 
@@ -28,9 +28,9 @@ function App() {
         <p
         style={{fontFamily: 'var(--montserrat)', fontSize:'32px', textAlign:'center'}}
         >Estamos trabalhando nisso. <br /> Pedimos desculpas pelo inconveniente</p>
-      </div> */}
+      </div>
 
-      <Toaster position="top-center" theme="light" />
+      {/* <Toaster position="top-center" theme="light" />
       <PageTransition
         curtainContent={
           <div className="workingOn bg-mist-950"
@@ -54,7 +54,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="reserva/:id/pago" element={<Checkout />}/>
         </Routes>
-      </PageTransition>
+      </PageTransition> */}
 
     </>
   )
